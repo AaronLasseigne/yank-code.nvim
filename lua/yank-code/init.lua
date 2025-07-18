@@ -14,14 +14,14 @@ local function indent_size(lines)
 end
 
 local function comment(start_line, end_line)
-  local commentstring = vim.api.nvim_buf_get_option(0, 'commentstring')
-  if not commentstring or #commentstring == 0 then
-    return ''
-  end
-
   local file_name = vim.fn.getreg('%')
   if not file_name or #file_name == 0 then
     return ''
+  end
+
+  local commentstring = vim.api.nvim_buf_get_option(0, 'commentstring')
+  if not commentstring or #commentstring == 0 then
+    commentstring = '%s'
   end
 
   local note = commentstring:format(file_name)
