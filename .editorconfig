@@ -1,0 +1,11 @@
+root = true
+
+# Everywhere
+[*]
+end_of_line = lf
+trim_trailing_whitespace = true
+
+# Lua
+[*.lua]
+indent_style = space
+indent_size = 2
