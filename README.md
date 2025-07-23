@@ -2,8 +2,7 @@
 
 Yank code to the clipboard. Code is automatically unindented. A header is added
 in the form of a comment that includes the repo name, file name, and lines
-copied. Adding the header relies on `commentstring` being set correctly. If
-`commentstring` is set to an empty string (e.g. JSON), no header will be added.
+copied.
 
 Instead of yanking:
 
@@ -51,6 +50,11 @@ Now you're ready to paste it into Slack or wherever you need!
 ## Usage
 
 Use it just like you would yank!
+
+## Caveats
+
+Adding the header relies on `commentstring` being set correctly. If
+`commentstring` is set to an empty string (e.g. JSON), no header will be added.
 
 The name of the repo is the name of the git base directory. The file path is
 relative to that same directory. If the code is not located in git version
