@@ -13,9 +13,48 @@ local function indent_size(lines)
   return space_count
 end
 
+local function get_git_path()
+  local git_root_path = vim.fn.system({'git', 'rev-parse', '--show-toplevel'})
+  if #git_root_path > 0 and git_root_path:sub(1, 6) ~= 'fatal:' then
+    return vim.trim(git_root_path)
+  end
+
+  return ''
+end
+
+local function get_file_path()
+  local path = vim.fn.expand('%')
+
+  local git_root_path = get_git_path()
+  if #git_root_path > 0 then
+    path = vim.fn.expand('%:p'):sub(#git_root_path + 2) -- absolute path and +1 to start after, +1 to remove slash
+  end
+
+  return path
+end
+
+local function get_repo_name()
+  local git_root_path = get_git_path()
+
+  if #git_root_path > 0 then
+    local directories = vim.split(git_root_path, '/', { plain = true })
+    return directories[#directories]
+  end
+
+  return ''
+end
+
 local function comment(start_line, end_line)
-  local file_name = vim.fn.getreg('%')
-  if not file_name or #file_name == 0 then
+  local note = get_repo_name()
+
+  local file_path = get_file_path()
+  if #file_path > 0 then
+    if #note == 0 then
+      note = file_path
+    else
+      note = note .. ': ' .. file_path
+    end
+  else
     return ''
   end
 
@@ -24,14 +63,13 @@ local function comment(start_line, end_line)
     commentstring = '%s'
   end
 
-  local note = commentstring:format(file_name)
   if start_line == end_line then
     note = note .. (' (line %d)'):format(start_line)
   else
     note = note .. (' (lines %d-%d)'):format(start_line, end_line)
   end
 
-  return note .. '\n'
+  return commentstring:format(note) .. '\n'
 end
 
 local function yank_code(args)
