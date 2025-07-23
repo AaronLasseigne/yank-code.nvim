@@ -49,7 +49,7 @@ local function yank_code(args)
   end
 
   vim.fn.setreg('+', output)
-  print(('%i lines of code yanked'):format(#lines))
+  vim.notify(('%i lines of code yanked'):format(#lines), vim.log.levels.INFO)
 end
 
 function M.setup()
